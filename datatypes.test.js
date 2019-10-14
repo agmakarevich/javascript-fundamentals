@@ -1,13 +1,13 @@
 describe("Data types", () => {
   describe("Boolean", () => {
     it("Should define False and True boolean variables", () => {
-      let a;
-      let b;
+      let a = false;
+      let b = true;
 
       expect(a).toBeFalsy();
-      expect(/* Get type of variable a */).toBe("boolean");
+      expect(typeof a).toBe("boolean");
       expect(b).toBeTruthy();
-      expect(/* Get type of variable b */).toBe("boolean");
+      expect(typeof b).toBe("boolean");
     });
 
     it("Should use different logical operators with 2 boolean operands", () => {
@@ -15,9 +15,9 @@ describe("Data types", () => {
       const TRUE = true;
 
       let useLogicalAnd = FALSE && TRUE;
-      let useLogicalOr;
-      let useLogicalNot;
-      let useDoubleLogicalNot;
+      let useLogicalOr = TRUE || FALSE;
+      let useLogicalNot = !FALSE;
+      let useDoubleLogicalNot = !!FALSE;
 
       expect(useLogicalAnd).toBe(false);
       expect(useLogicalOr).toBe(true);
@@ -32,9 +32,9 @@ describe("Data types", () => {
       const d = true;
 
       let cond1 = (a || c) && d;
-      let cond2;
-      let cond3;
-      let cond4;
+      let cond2 = (a && d) || !b;
+      let cond3 = (!!c || !!a) && b;
+      let cond4 = a && (b || !!c);
 
       expect(cond1).toBe(true);
       expect(cond2).toBe(true);
@@ -45,11 +45,11 @@ describe("Data types", () => {
 
   describe("Number", () => {
     it("Should define different numbers", () => {
-      let a;
-      let b;
-      let c;
-      let d;
-      let nan;
+      let a = 2 + 8;
+      let b = 5 / 0;
+      let c = 20.5;
+      let d = 2 - 7;
+      let nan = 'hello'/ 2 || NaN;
 
       expect(a).toBe(10);
       expect(!Number.isFinite(b)).toBe(true);
@@ -63,12 +63,12 @@ describe("Data types", () => {
       const a = 10;
       const b = 30;
 
-      expect(a + b).toBe(/* ??? */);
-      expect(/* Put Expression Here */).toBe(-20);
-      expect(/* Put Expression Here */).toBe(20);
-      expect(/* Put Expression Here */).toBe(300);
-      expect(/* Put Expression Here */).toBe(3);
-      expect(/* Put Expression Here */).toBeCloseTo(0.333);
+      expect(a + b).toBe(40);
+      expect(a - b).toBe(-20);
+      expect(b - a).toBe(20);
+      expect(a * b).toBe(300);
+      expect(b / a).toBe(3);
+      expect(a / b).toBeCloseTo(0.333);
     });
 
     it("Should combine base operators", () => {
@@ -77,9 +77,12 @@ describe("Data types", () => {
       const c = 100;
 
       expect(a + b + c).toBe(140);
-      expect(/* Put Expression Here */).toBe(400);
-      expect(/* Put Expression Here */).toBe(2000);
-      expect(/* Put Expression Here */).toBe(3300);
+      expect((a + b) * c / a).toBe(400);
+      expect(c * (b - a)).toBe(2000);
+      expect(a * b + b * c).toBe(3300);
+      expect((b + c) / a).toBe(13);
+      expect((c - a) * (c - a)).toBe(8100);
+      expect((c + a) * c / a).toBe(1100);
       // TODO: write 3 own test
     });
 
@@ -87,33 +90,34 @@ describe("Data types", () => {
       expect(Number("123")).toBe(123);
       expect(Number("12.3")).toBe(12.3);
 
-      expect(/* Number(???) */).toBe(12);
-      expect(/* Number(???) */).toBe(12.3);
-      expect(/* Number(???) */).toBe(0);
-      expect(/* Number(???) */).toBe(0);
-      expect(Number("0b11")).toBe(/* ??? */);
-      expect(Number("foo")).toBe("/* ??? */");
-      expect(/* Number(???*/).toBe(NaN);
-      expect(Number(/* "???" */)).toBe(Number.NEGATIVE_INFINITY);
+      expect(Number('012')).toBe(12);
+      expect(Number(1 + '2.3')).toBe(12.3);
+      expect(Number("    ")).toBe(0);
+      expect(Number("+0")).toBe(0);
+      expect(Number("0b11")).toBe(3);
+      expect(Number("foo")).toBe(NaN);
+      expect(Number("Очень забавные тесты")).toBe(NaN);
+      expect(Number("-Infinity")).toBe(Number.NEGATIVE_INFINITY);
     });
   });
 
   describe("String, object, null, undefined and symbols", () => {
     it("String", () => {
-      let str1; // Use single quote
-      let str2; // Use String(???)
-      let str3; // Use new String(???)
-      let str4; // Use template string and str1 variable
+      let str1 = 'string'; // Use single quote
+      let str2 = String ('string'); // Use String(???)
+      let str3 = new String (str1);
+      let str4 = `${str1}`; // Use template string and str1 variable
 
       expect(str1).toBe("string");
       expect(str1 === str2).toBeTruthy();
       expect(str1 === str3).toBeFalsy();
       expect(str1 === str4).toBeTruthy();
-      expect(/* use typeof */).toBe("object");
+      expect(typeof str3).toBe("object");
     });
 
     it("Should define object with 2 props", () => {
-      let obj; // Define object with 2 props
+      let obj = {
+    }; // Define object with 2 props
 
       expect(typeof obj).toBe("object");
       expect(Object.keys(obj).length).toBe(2);
