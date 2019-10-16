@@ -8,17 +8,25 @@ describe('', () => {
       return x * 3;
     }
 
-    expect(/* compose(  add5, mul3)(2) */).toBe(add5(mul3(2)));
+    function compose(add5, mul3) {
+      return function (val) {
+        return add5(mul3(val))
+      }
+    }
+
+    expect(compose(add5, mul3)(2)).toBe(add5(mul3(2)));
   });
 
   test('Should create new user with unique number identifier using increment', () => {
-    expect(/* createUser("Ivan") */).toStrictEqual({ name: 'Ivan', id: 1 });
+    expect(/* createUser("Ivan") */).toStrictEqual({name: 'Ivan', id: 1});
     expect(/* createUser("Petr").name */).toBe('Petr');
     expect(/* createUser("Anna").id */).toBe(3);
   });
 
   test('Should create function that each time return new value incremented by incrementValue and start from start', () => {
-    function createIncrementor(start, incrementValue) {}
+    function createIncrementor(start, incrementValue) {
+    }
+
     const nextFrom10By7 = createIncrementor(10, 7);
     expect(nextFrom10By7()).toBe(10);
     expect(nextFrom10By7()).toBe(17);
@@ -29,7 +37,7 @@ describe('', () => {
     function solution1(from, to) {
       const result = [];
       for (var i = from; i <= to; i++) {
-        result.push(function() {
+        result.push(function () {
           return i;
         });
       }
@@ -39,7 +47,7 @@ describe('', () => {
     function solution2(from, to) {
       const result = [];
       for (var i = from; i <= to; i++) {
-        result.push(function() {
+        result.push(function () {
           return i;
         });
       }
@@ -57,17 +65,20 @@ describe('', () => {
 
   test('Should works as expected. Fix me', () => {
     let a = 0;
+
     function foo(callback) {
       function inner() {
         // DON"T CHANGE ME
         a++;
         return a;
       }
+
       return {
         fromInner: inner,
         fromCallback: callback
       };
     }
+
     function getCallbackFn() {
       return function callbackFn() {
         // DON'T change me
@@ -140,6 +151,7 @@ describe('', () => {
     }
 
     let invokesCount = 0;
+
     function formula(x) {
       // Don't change
       invokesCount++;
@@ -158,11 +170,11 @@ describe('', () => {
   test('logger method should log start and end of call of the standard js function', () => {
     const logger = {
       messages: [],
-      logStart: function(name) {
+      logStart: function (name) {
         this.messages.push(`Start ${name}`);
       },
 
-      logEnd: function(name) {
+      logEnd: function (name) {
         this.messages.push(`End ${name}`);
       }
     };
@@ -171,7 +183,9 @@ describe('', () => {
       // TODO: implement
     }
 
-    function example() {}
+    function example() {
+    }
+
     const loggedExample = logMe(example);
     loggedExample();
     expect(logger.messages).toStrictEqual(['Start example', 'End example']);
@@ -179,6 +193,7 @@ describe('', () => {
 
   test('Creates a function that is restricted to invoking func once. Repeat calls to the function return the value of the first invocation. The func is invoked with the this binding and arguments of the created function.', () => {
     let callsCount = 0;
+
     function init() {
       callsCount++;
     }
