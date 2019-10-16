@@ -117,33 +117,37 @@ describe("Data types", () => {
 
     it("Should define object with 2 props", () => {
       let obj = {
+        p:"",
+        p2:""
     }; // Define object with 2 props
 
       expect(typeof obj).toBe("object");
       expect(Object.keys(obj).length).toBe(2);
+      expect(Object.keys(obj).includes("p2")).toBe(true);
+      expect(Object.values(obj).indexOf("object")).toBe(-1);
 
       // TODO: write 2 own tests
     });
 
     it("Should define variable with Null and undefined values", () => {
-      let nullVar; // Set null
-      let undefinedVar; // Set undefined
+      let nullVar = null; // Set null
+      let undefinedVar = Object(); // Set undefined
       let someVar; // Do not define it!!!
 
       expect(nullVar).toBeNull();
       expect(undefinedVar).toBe(undefinedVar);
       expect(someVar).toBe(undefined);
-      expect(/* typeof ??? */).toBe("object");
-      expect(/* typeof ??? */).toBe("undefined");
+      expect(typeof undefinedVar).toBe("object");
+      expect(typeof someVar).toBe("undefined");
     });
 
     it("Should define 2 Symbol variable with the same description", () => {
       const smbl1 = Symbol("test");
       const smbl2 = Symbol("test");
 
-      expect(typeof smbl1).toBe(/* ??? */);
-      expect(typeof smbl2).toBe(/* ??? */);
-      expect(/* Compare smbl1 and smbl2  */).toBe(/* ??? */);
+      expect(typeof smbl1).toBe("symbol");
+      expect(typeof smbl2).toBe("symbol");
+      expect(smbl1 === smbl2).toBe(false);
     });
   });
 });
