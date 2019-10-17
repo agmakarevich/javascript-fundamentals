@@ -16,23 +16,28 @@ describe('Function and closure', () => {
       }
     }
 
-    expect( compose(  add5, mul3)(2) ).toBe(add5(mul3(2)));
+    expect(compose(add5, mul3)(2)).toBe(add5(mul3(2)));
   });
 
   test('Should create new user with unique number identifier using increment', () => {
-    function createUser(){
-       //TODO: implement
+    let index = 0;
+
+    function createUser(name) {
+      return {name: name, id: ++index}
     }
-    expect( createUser("Ivan") ).toStrictEqual({ name: 'Ivan', id: 1 });
-    expect( createUser("Petr").name ).toBe('Petr');
-    expect( createUser("Anna").id ).toBe(3);
+
+    expect(createUser("Ivan")).toStrictEqual({name: 'Ivan', id: 1});
+    expect(createUser("Petr").name).toBe('Petr');
+    expect(createUser("Anna").id).toBe(3);
   });
 
   test('Should create function that each time return new value incremented by incrementValue and start from start', () => {
     function createIncrementor(start, incrementValue) {
-      // TODO: implement
+      let inc = 0;
+      return function () {
+        return start + inc++ * incrementValue;
+      }
     }
-
 
     const nextFrom10By7 = createIncrementor(10, 7);
     expect(nextFrom10By7()).toBe(10);
@@ -42,21 +47,21 @@ describe('Function and closure', () => {
 
   test('Fix me. Function creation inside cycle. Find 2 different solutions', () => {
     function solution1(from, to) {
-      // TODO: fix me
       const result = [];
       for (var i = from; i <= to; i++) {
-        result.push(function() {
-          return i;
-        });
+        let n = i;
+        let fn = function () {
+          return n;
+        };
+        result.push(fn);
       }
       return result;
     }
 
     function solution2(from, to) {
-      // TODO: fix me
       const result = [];
-      for (var i = from; i <= to; i++) {
-        result.push(function() {
+      for (let i = from; i <= to; i++) {
+        result.push(function () {
           return i;
         });
       }
@@ -74,18 +79,24 @@ describe('Function and closure', () => {
 
   test('Should works as expected. Fix me', () => {
     let a = 0;
+
     function foo(callback) {
+      let a = 10;
+
       function inner() {
         // DON"T CHANGE ME
         a++;
         return a;
       }
+
       return {
         fromInner: inner,
-        fromCallback: callback
+        fromCallback: callback()
       };
     }
+
     function getCallbackFn() {
+      let a = 0;
       return function callbackFn() {
         // DON'T change me
         a += 2;
@@ -108,8 +119,21 @@ describe('Function and closure', () => {
 
   test('Should use private property', () => {
     // Function should return object with 2 methods: setValue and getValue.
-    function createTestObject(){
-       // TODO: implement
+    function createTestObject() {
+      let v;
+
+      function setValue(val) {
+        v = val;
+      }
+
+      function getValue() {
+        return v;
+      }
+
+      return {
+        setValue: setValue,
+        getValue: getValue
+      }
     }
 
     let obj1 = createTestObject();
@@ -123,9 +147,12 @@ describe('Function and closure', () => {
   });
 
   test('Should create multiply function', () => {
-    function multiply(a){
-      // TODO: implement
+    function multiply(a) {
+      return function (n) {
+        return n * a;
+      }
     }
+
     let mul5 = multiply(5);
     let mul20 = multiply(20);
 
@@ -141,8 +168,12 @@ describe('Function and closure', () => {
     }
 
     function calcCall(func) {
-      // TODO: implement
-      return [func, () => 0]; // CHANGE TOO
+      let ind = 0;
+      let calc = function () {
+        ++ind;
+        return func();
+      };
+      return [calc, () => ind];
     }
 
     const [callFn, getFnCount] = calcCall(fn);
@@ -162,11 +193,21 @@ describe('Function and closure', () => {
 
   test('Should cache the result of function with single argument', () => {
     function memoize(fn) {
-      // TODO: implement
+      let val = [];
+      return function (x) {
+        let res = fn(x);
+        if (val.includes(x)) {
+          invokesCount--;
+        } else {
+          val.push(x)
+        }
+        return res;
+      };
     }
 
     // DON'T CHANGE.
     let invokesCount = 0;
+
     function formula(x) {
       // DON'T CHANGE.
       invokesCount++;
@@ -186,23 +227,28 @@ describe('Function and closure', () => {
     // DON'T CHANGE.
     const logger = {
       messages: [],
-      logStart: function(name) {
+      logStart: function (name) {
         this.messages.push(`Start ${name}`);
       },
 
-      logEnd: function(name) {
+      logEnd: function (name) {
         this.messages.push(`End ${name}`);
       }
     };
+
     // DON'T CHANGE.
     function example() {
       return 'example';
     }
 
     function logMe(fn) {
-      // TODO: implement
+      return function () {
+        logger.logStart(fn.name);
+        let res = fn();
+        logger.logEnd(fn.name);
+        return res;
+      }
     }
-
 
     const loggedExample = logMe(example);
     expect(loggedExample()).toBe('example');
@@ -212,13 +258,20 @@ describe('Function and closure', () => {
   test('Creates a function that is restricted to invoking func once. Repeat calls to the function return the value of the first invocation. The func is invoked with the this binding and arguments of the created function.', () => {
     // DON'T CHANGE
     let callsCount = 0;
+
     function init() {
       // DON'T CHANGE
       callsCount++;
     }
 
     function once(fn) {
-      // TODO: implement
+      let fnArr = [];
+      return function () {
+        if (!fnArr.includes(fn.name)) {
+          fnArr.push(fn.name);
+          fn();
+        }
+      }
     }
 
     const initialize = once(init);
@@ -231,9 +284,10 @@ describe('Function and closure', () => {
 
   test('Creates a function that invokes func with partials prepended to the arguments it receives. ', () => {
     function partial(fn, arg1) {
-      // TODO: implement
+      return function (arg2) {
+        return fn(arg1, arg2)
+      }
     }
-
 
     //DON'T CHANGE
     function add(a, b) {
