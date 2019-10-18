@@ -1,54 +1,106 @@
 describe('Array', () => {
   it('Should find the position of the first occurrence', () => {
     const arr1 = [1, 5, 8, 3, 2];
-    expect(/* Find 5 position*/).toBe(1);
-    expect(/* Find 3 position */).toBe(/* ??? */);
+    expect(arr1.indexOf(5)).toBe(1);
+    expect(arr1.indexOf(3)).toBe(3);
 
     // TODO: Write additional its
+    expect(arr1.indexOf(0)).toBe(-1);
+    expect(arr1.indexOf(7)).toBe(-1);
+
   });
 
   it('Should return the specified array twice', () => {
-    expect(/* double([1, 2, 3])*/).toStrictEqual([1, 2, 3, 1, 2, 3]);
+    function double(arr){
+      return arr.concat(arr)
+    }
+    expect(double([1, 2, 3])).toStrictEqual([1, 2, 3, 1, 2, 3]);
 
     // TODO: Write additional its
   });
 
   it('Convert the number array to  the array of string values', () => {
-    expect(/* convertToStringArr([1, 2, 3]) */).toStrictEqual(['1', '2', '3']);
+    function convertToStringArr(arr){
+      return arr.map(function(a){return `${a}`})
+    }
+    expect(convertToStringArr([1, 2, 3])).toStrictEqual(['1', '2', '3']);
 
     // TODO: Write additional its
   });
 
   it('Should return the number of all occurrences of specified item in an array', () => {
-    expect(/* calculateOccurences([1, 2, 1, 4, 1], 1)*/).toBe(3);
+    function calculateOccurences(arr, v){
+      return arr.filter(function (a){return a === v}).length
+    }
+    expect(calculateOccurences([1, 2, 1, 4, 1], 1)).toBe(3);
 
     // TODO: Write additional its
   });
 
   it('Should convert strings from specified array to uppercase', () => {
-    expect(/* toUppercase(["aaaa", "abc"])*/).toStrictEqual(['AAAA', 'ABC']);
+    function toUppercase(arr){
+      return arr.map(function (a){return a.toUpperCase()})
+    }
+    expect(toUppercase(["aaaa", "abc"])).toStrictEqual(['AAAA', 'ABC']);
   });
 
   it('Insert an item at specified position', () => {
-    expect(/* insert([1, 2, 4], 3, 2)*/).toStrictEqual([1, 2, 3, 4]);
+    function insert(arr,v,i){
+      arr.splice(i,0,v);
+      return arr
+    }
+    expect(insert([1, 2, 4], 3, 2)).toStrictEqual([1, 2, 3, 4]);
   });
 
   it('Should return the n last items from the specified array', () => {
-    expect(/* last([1, 2, 3, 4, 5, 6, 7], 3) */).toStrictEqual([5, 6, 7]);
+    function last(arr,v){
+    return arr.slice(-v)
+      }
+    expect(last([1, 2, 3, 4, 5, 6, 7], 3)).toStrictEqual([5, 6, 7]);
   });
 
   it('Return the 3 largest items from integer array', () => {
-    expect(/* find3Largest([1, 3, 8, 3, 29, 11, 2, 17, 9, 1]) */).toStrictEqual(
+    function find3Largest(arr, v){
+      let res = [];
+      for(let i = 0; i<3;i++){
+        for(let b=0;b<arr.length;b++){
+          if(b===0 || res[i] < arr[b] && !res.includes(arr[b]))
+            res[i] = arr[b];
+        }
+      }
+      return arr.filter(function (a) { return res.includes(a)});
+    }
+
+    expect(find3Largest([1, 3, 8, 3, 29, 11, 2, 17, 9, 1])).toStrictEqual(
       [29, 11, 17]
     );
   });
 
   it('Sort numbers array by using array method', () => {
-    expect(/* sort([2, 3, 1, 8, 4, 5] ) */).toStrictEqual([8, 5, 4, 3, 2, 1]);
+    function sort(arr){
+      arr.sort(function (a, b) {
+        if (a > b){
+          return -1;
+        }
+        if (a < b){
+          return 1;
+        }
+        return 0;
+      })
+      return arr
+    }
+    expect(sort([2, 3, 1, 8, 4, 5] )).toStrictEqual([8, 5, 4, 3, 2, 1]);
   });
 
   it('Should summarize of all items of numbers array', () => {
-    expect(/* sum([1, 5, 7, 9, 3]) */).toBe(25);
+    function sum(arr) {
+      let sum = 0;
+      arr.forEach(function (a) {
+         sum+= a;
+      });
+      return sum;
+    }
+    expect(sum([1, 5, 7, 9, 3])).toBe(25);
   });
 
   it('Should return the numbers of falsy value in the specified array', () => {
